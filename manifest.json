@@ -1,0 +1,21 @@
+{
+  "name": "ニコニコマンダー",
+  "version": "1.1",
+  "manifest_version": 2,
+
+  "description": "ニコニコ動画視聴ページに便利なショートカットキーと機能を追加します。",
+
+  "permissions": [
+    "tabs", "http://*/*",
+    "storage"
+  ],
+
+  "options_page": "options.html",
+
+  "content_scripts": [
+    {
+      "matches": ["http://www.nicovideo.jp/watch/*"],
+      "js": ["script.js"]
+    }
+  ]
+}
