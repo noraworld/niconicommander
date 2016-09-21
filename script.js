@@ -176,13 +176,16 @@ $(function() {
   };
 
   // ショートカットキーに応じて関数を呼び出す
-  document.addEventListener('keydown', function(event) {
+  window.addEventListener('keydown', function(event) {
 
-    if ((document.activeElement.nodeName === 'INPUT' && document.activeElement.getAttribute('type') === 'text') || document.activeElement.isContentEditable || document.activeElement.nodeName == 'INPUT' || document.activeElement.nodeName == 'TEXTAREA') {
-      if (event.keyCode == 27) {
-        document.activeElement.blur();
-      }
+    if ((document.activeElement.nodeName === 'INPUT'
+    || document.activeElement.nodeName == 'TEXTAREA'
+    || document.activeElement.getAttribute('type') === 'text')
+    || document.activeElement.isContentEditable === true) {
       return false;
+    }
+    else {
+      activeBlur();
     }
 
     if (event.keyCode == 27) {
@@ -215,6 +218,11 @@ $(function() {
       }
     }
   }, true);
+
+  // アクティブフォーカスを外す
+  function activeBlur() {
+    document.activeElement.blur();
+  }
 
   // 常にプレイヤーからフォーカスを外す
   $('#external_nicoplayer').on('focus', function() {
