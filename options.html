@@ -6,149 +6,151 @@
   <link rel="stylesheet" type="text/css" href="options.css">
 </head>
 <body>
+
   <header>
     <h1>ニコニコマンダー設定ページ</h1>
   </header>
+
   <div id="main">
 
-    <h3>ショートカットキー</h3>
+    <h3>ショートカット</h3>
 
     <div class="settings">
-      <label for="playAndPause">再生/停止</label>
-      <input id="playAndPause" placeholder="キーを入力" type="text" value="">
+      <label for="toggle-play-and-pause">再生/停止</label>
+      <input id="toggle-play-and-pause" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="prevFrame">数秒戻る</label>
-      <input id="prevFrame" placeholder="キーを入力" type="text" value="">
+      <label for="jump-to-beginning">動画の一番最初に移動する</label>
+      <input id="jump-to-beginning" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="nextFrame">数秒進める</label>
-      <input id="nextFrame" placeholder="キーを入力" type="text" value="">
+      <label for="jump-to-end">動画の一番最後に移動する</label>
+      <input id="jump-to-end" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="jumpToStart">動画の一番最初に移動する</label>
-      <input id="jumpToStart" placeholder="キーを入力" type="text" value="">
+      <label for="prev-frame">数秒戻る</label>
+      <input id="prev-frame" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="jumpToEnd">動画の一番最後に移動する</label>
-      <input id="jumpToEnd" placeholder="キーを入力" type="text" value="">
+      <label for="next-frame">数秒進める</label>
+      <input id="next-frame" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="backToPrevFrame">以前の再生時間に戻る</label>
-      <input id="backToPrevFrame" placeholder="キーを入力" type="text" value="">
+      <label for="jump-to-specified-frame">指定した時間にジャンプ</label>
+      <input id="jump-to-specified-frame" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="changeScreenMode">フルスクリーンモード/解除</label>
-      <input id="changeScreenMode" placeholder="キーを入力" type="text" value="">
+      <label for="back-to-before-frame">以前の再生時間に戻る</label>
+      <input id="back-to-before-frame" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="jumpToFrame">指定した時間にジャンプ</label>
-      <input id="jumpToFrame" placeholder="キーを入力" type="text" value="">
+      <label for="change-screen-mode">フルスクリーンモード/解除</label>
+      <input id="change-screen-mode" placeholder="キーを入力" type="text" value="">
     </div>
 
     <div class="settings">
-      <label for="onbeforeunloadWarning">ページを離れる前に警告する</label>
-      <input id="onbeforeunloadWarning" type="checkbox">
+      <label for="onbeforeunload-warning">ページを離れる前に警告する</label>
+      <input id="onbeforeunload-warning" type="checkbox">
     </div>
 
-    <button id="save">保存する</button>
-    <button id="restore">初期化する</button>
-
+    <div id="button-wrap">
+      <button id="save">保存する</button>
+      <button id="reset">初期化する</button>
+    </div>
     <div id="status"></div>
 
-    <div id="info">
-      <h3>グローバルキー</h3>
+    <h3>固定のショートカット</h3>
 
-      <div class="settings">
-        <label for="globalPlayAndPause">再生/停止</label>
-        <span id="globalPlayAndPause">Space</span>
-      </div>
+    <div class="settings">
+      <label for="toggle-play-and-pause">再生/停止</label>
+      <span id="toggle-play-and-pause">Space</span>
+    </div>
 
-      <div class="settings">
-        <label for="globalPrevFrame">数秒戻る</label>
-        <span id="globalPrevFrame">左矢印</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-prev-frame">数秒戻る</label>
+      <span id="fixed-prev-frame">左矢印</span>
+    </div>
 
-      <div class="settings">
-        <label for="globalNextFrame">数秒進める</label>
-        <span id="globalNextFrame">右矢印</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-next-frame">数秒進める</label>
+      <span id="fixed-next-frame">右矢印</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-0">動画の0%の位置に移動する</label>
-        <span id="jumpToTimeRatio-0">0</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-0">動画の0%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-0">0</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-1">動画の10%の位置に移動する</label>
-        <span id="jumpToTimeRatio-1">1</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-1">動画の10%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-1">1</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-2">動画の20%の位置に移動する</label>
-        <span id="jumpToTimeRatio-2">2</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-2">動画の20%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-2">2</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-3">動画の30%の位置に移動する</label>
-        <span id="jumpToTimeRatio-3">3</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-3">動画の30%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-3">3</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-4">動画の40%の位置に移動する</label>
-        <span id="jumpToTimeRatio-4">4</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-4">動画の40%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-4">4</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-5">動画の50%の位置に移動する</label>
-        <span id="jumpToTimeRatio-5">5</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-5">動画の50%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-5">5</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-6">動画の60%の位置に移動する</label>
-        <span id="jumpToTimeRatio-6">6</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-6">動画の60%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-6">6</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-7">動画の70%の位置に移動する</label>
-        <span id="jumpToTimeRatio-7">7</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-7">動画の70%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-7">7</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-8">動画の80%の位置に移動する</label>
-        <span id="jumpToTimeRatio-8">8</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-8">動画の80%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-8">8</span>
+    </div>
 
-      <div class="settings">
-        <label for="jumpToTimeRatio-9">動画の90%の位置に移動する</label>
-        <span id="jumpToTimeRatio-9">9</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-jump-to-timer-ratio-9">動画の90%の位置に移動する</label>
+      <span id="fixed-jump-to-timer-ratio-9">9</span>
+    </div>
 
-      <div class="settings">
-        <label for="globalBlur">フォーカスを外す</label>
-        <span id="globalBlur">Esc</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-active-blur">フォーカスを外す</label>
+      <span id="fixed-active-blur">esc</span>
+    </div>
 
-      <div class="settings">
-        <label for="globalInputComment">コメントを入力する</label>
-        <span id="globalInputComment">CC</span>
-      </div>
+    <div class="settings">
+      <label for="fixed-input-comment">コメントを入力する</label>
+      <span id="fixed-input-comment">CC</span>
+    </div>
 
-      <div class="notice">
-        <p style="display:inline;">コメント入力欄にフォーカスするにはキーボードのCを2回押します。</p>
-        <p style="display:inline; color:red; font-weight:bold;">マウス操作ではフォーカスすることができませんのでご注意ください。</p>
-      </div>
-
+    <div class="notice">
+      <p style="display:inline;">コメント入力欄にフォーカスするにはキーボードのCを2回押します。</p>
+      <p style="display:inline; color:red; font-weight:bold;">マウス操作ではフォーカスすることができませんのでご注意ください。</p>
     </div>
 
   </div>
+
+  <script type="text/javascript" src="jquery.js"></script>
   <script type="text/javascript" src="options.js"></script>
 </body>
 </html>

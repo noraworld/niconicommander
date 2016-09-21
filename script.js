@@ -15,8 +15,8 @@ $(function() {
   var fixed = {
     // 固定のキーコード
     togglePlayAndPauseKeyCode: ' ',           // space
-    rewindTimeKeyCode:         'ArrowLeft',   // left-arrow
-    advanceTimeKeyCode:        'ArrowRight',  // right-arrow
+    prevFrameKeyCode:          'ArrowLeft',   // left-arrow
+    nextFrameKeyCode:          'ArrowRight',  // right-arrow
     isEscape:                  'Escape',      // esc
   };
 
