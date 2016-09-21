@@ -6,7 +6,8 @@
   "description": "ニコニコ動画視聴ページに便利なショートカットキーと機能を追加します。",
 
   "permissions": [
-    "tabs", "http://*/*",
+    "activeTab",
+    "tabs",
     "storage"
   ],
 
@@ -14,8 +15,9 @@
 
   "content_scripts": [
     {
-      "matches": ["http://www.nicovideo.jp/watch/*"],
-      "js": ["script.js"]
+      "all_frames": true,
+      "matches": ["http://www.nicovideo.jp/*"],
+      "js": ["jquery.js", "script.js"]
     }
   ]
 }

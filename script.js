@@ -1,4 +1,4 @@
-chrome.extension.sendMessage({}, function(response) {
+$(function() {
 
   var settings = {
     playAndPauseKeyCode:     75,  // default: K
@@ -23,9 +23,6 @@ chrome.extension.sendMessage({}, function(response) {
     settings.jumpToFrameKeyCode      = Number(storage.jumpToFrameKeyCode);
     settings.onbeforeunloadWarning   = Boolean(storage.onbeforeunloadWarning);
   });
-
-  // 動画プレイヤーから常にフォーカスを外す
-  autoBlur();
 
   // ページを離れるときに警告
   window.onbeforeunload = function() {
@@ -220,11 +217,8 @@ chrome.extension.sendMessage({}, function(response) {
   }, true);
 
   // 常にプレイヤーからフォーカスを外す
-  function autoBlur() {
-    document.getElementById('external_nicoplayer').blur();
-    timerId = setTimeout(function() {
-      autoBlur();
-    }, 0);
-  };
+  $('#external_nicoplayer').on('focus', function() {
+    $(this).blur();
+  });
 
 });
