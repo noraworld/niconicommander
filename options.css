@@ -2,26 +2,23 @@ body {
   margin: 0;
   padding-left: 15px;
   padding-top: 53px;
-  font-family: sans-serif;
+  font-family: "Open Sans", "sans-serif";
   font-size: 12px;
   color: rgb(48, 57, 66);
 }
 
-h1, h2, h3 {
-  font-weight: normal;
-  line-height: 1;
-    user-select: none;
-  cursor: default;
-}
 h1 {
   font-size: 1.5em;
-  margin: 21px 0 13px;
+  margin-bottom: 0.8em;
+  color: black;
 }
+
 h3 {
   font-size: 1.2em;
   margin-bottom: 0.8em;
   color: black;
 }
+
 p {
   margin: 0.65em 0;
 }
@@ -31,8 +28,9 @@ header {
   top: 0;
   left: 15px;
   right: 0;
-  border-bottom: 1px solid #EEE;
+  border-bottom: 1px solid #eee;
   background: linear-gradient(white, white 40%, rgba(255, 255, 255, 0.92));
+  z-index: 100000;
 }
 header, #main {
   min-width: 600px;
@@ -50,58 +48,52 @@ header, #main {
 button {
   -webkit-appearance: none;
   position: relative;
-
   margin: 0 1px 0 0;
   padding: 0 10px;
   min-width: 4em;
   min-height: 2em;
-
-  background-image: linear-gradient(#EDEDED, #EDEDED 38%, #DEDEDE);
-  border: 1px solid rgba(0,0,0,0.25);
+  background-image: linear-gradient(#ededed, #ededed 38%, #dedede);
+  border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 2px;
   outline: none;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.75);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.75);
   color: #444;
-  text-shadow: 0 1px 0 rgb(240,240,240);
+  text-shadow: 0 1px 0 rgb(240, 240, 240);
   font: inherit;
-
-    user-select: none;
+  user-select: none;
 }
 
-
 input[type="text"] {
-    width: 75px;
-    text-align: center;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  width: 75px;
+  text-align: center;
+  border: 1px solid #cccccc;
 }
 
 span {
-  display: inline-block;
-  width: 75px;
+  width: 79px;
   text-align: center;
+  display: inline-block;
 }
 
 .settings {
-    margin: 6px 0px;
+  margin: 10px 0;
 }
 
-label {
-    display: inline-block;
-    width: 170px;
-}
-
-label[for=onbeforeunloadWarning] {
-  width: 200px;
-}
-
-div[class=notice] {
+label, #button-wrap {
   display: inline-block;
-  width: 235px;
-  padding-left: 10px;
-  text-align: justify;
+  width: 180px;
+}
+
+.invalid-value {
+  display: inline-block;
+  padding-left: 15px;
+  color: red;
 }
 
 #status {
-    color: #9D9D9D;
-    display: inline-block;
-    margin-left: 50px;
+  display: inline-block;
+  font-weight: bold;
+  width: 79px;
+  text-align: center;
 }
