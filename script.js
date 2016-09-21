@@ -1,6 +1,7 @@
 $(function() {
 
   var settings = {
+    // オプションで変更可能なキーコード
     playAndPauseKeyCode:     75,  // default: K
     nextFrameKeyCode:        76,  // default: L
     prevFrameKeyCode:        74,  // default: J
@@ -10,6 +11,13 @@ $(function() {
     changeScreenModeKeyCode: 83,  // default: S
     jumpToFrameKeyCode:      84,  // default: T
     onbeforeunloadWarning:   true // default: true
+  };
+  var fixed = {
+    // 固定のキーコード
+    togglePlayAndPauseKeyCode: ' ',           // space
+    rewindTimeKeyCode:         'ArrowLeft',   // left-arrow
+    advanceTimeKeyCode:        'ArrowRight',  // right-arrow
+    isEscape:                  'Escape',      // esc
   };
 
   chrome.storage.sync.get(settings, function(storage) {
@@ -177,7 +185,17 @@ $(function() {
 
   // ショートカットキーに応じて関数を呼び出す
   window.addEventListener('keydown', function(event) {
+    // escが押されたらアクティブフォーカスを外す
+    if (eventKey == fixed.isEscape) {
+      activeBlur();
+    }
+    
+    // 装飾キーをエスケープ
+    if (event.metaKey || event.ctrlKey || event.altKey) {
+      return false;
+    }
 
+    // 入力フォームにフォーカスがあるときはショートカットを無効化
     if ((document.activeElement.nodeName === 'INPUT'
     || document.activeElement.nodeName == 'TEXTAREA'
     || document.activeElement.getAttribute('type') === 'text')
