@@ -2,15 +2,15 @@ $(function() {
 
   var settings = {
     // オプションで変更可能なキーコード
-    playAndPauseKeyCode:     75,  // default: K
-    nextFrameKeyCode:        76,  // default: L
-    prevFrameKeyCode:        74,  // default: J
-    jumpToStartKeyCode:      72,  // default: H
-    jumpToEndKeyCode:        69,  // default: E
-    backToPrevFrameKeyCode:  66,  // default: B
-    changeScreenModeKeyCode: 83,  // default: S
-    jumpToFrameKeyCode:      84,  // default: T
-    onbeforeunloadWarning:   true // default: true
+    togglePlayAndPauseKeyCode:   'k',  // default: K
+    jumpToBeginningKeyCode:      'h',  // default: H
+    jumpToEndKeyCode:            'e',  // default: E
+    prevFrameKeyCode:            'j',  // default: J
+    nextFrameKeyCode:            'l',  // default: L
+    jumpToSpecifiedFrameKeyCode: 't',  // default: T
+    backToBeforeFrameKeyCode:    'b',  // default: B
+    changeScreenModeKeyCode:     's',  // default: S
+    onbeforeunloadWarning:      true,  // default: true
   };
   var fixed = {
     // 固定のキーコード
@@ -18,34 +18,102 @@ $(function() {
     prevFrameKeyCode:          'ArrowLeft',   // left-arrow
     nextFrameKeyCode:          'ArrowRight',  // right-arrow
     isEscape:                  'Escape',      // esc
+    inputCommentKeyCode:       'c',
   };
 
   chrome.storage.sync.get(settings, function(storage) {
-    settings.playAndPauseKeyCode     = Number(storage.playAndPauseKeyCode);
-    settings.nextFrameKeyCode        = Number(storage.nextFrameKeyCode);
-    settings.prevFrameKeyCode        = Number(storage.prevFrameKeyCode);
-    settings.jumpToStartKeyCode      = Number(storage.jumpToStartKeyCode);
-    settings.jumpToEndKeyCode        = Number(storage.jumpToEndKeyCode);
-    settings.backToPrevFrameKeyCode  = Number(storage.backToPrevFrameKeyCode);
-    settings.changeScreenModeKeyCode = Number(storage.changeScreenModeKeyCode);
-    settings.jumpToFrameKeyCode      = Number(storage.jumpToFrameKeyCode);
-    settings.onbeforeunloadWarning   = Boolean(storage.onbeforeunloadWarning);
+    settings.togglePlayAndPauseKeyCode   = storage.togglePlayAndPauseKeyCode;
+    settings.jumpToBeginningKeyCode      = storage.jumpToBeginningKeyCode;
+    settings.jumpToEndKeyCode            = storage.jumpToEndKeyCode;
+    settings.prevFrameKeyCode            = storage.prevFrameKeyCode;
+    settings.nextFrameKeyCode            = storage.nextFrameKeyCode;
+    settings.jumpToSpecifiedFrameKeyCode = storage.jumpToSpecifiedFrameKeyCode;
+    settings.backToBeforeFrameKeyCode    = storage.backToBeforeFrameKeyCode;
+    settings.changeScreenModeKeyCode     = storage.changeScreenModeKeyCode;
+    settings.onbeforeunloadWarning       = Boolean(storage.onbeforeunloadWarning);
   });
+
+  // グローバル変数
+  var back;     // スタートやエンドに移動してしまったときの前の位置を保持する変数
+  var timerID;  // autoBlur内のsetTimeout止めるための変数
 
   // ページを離れるときに警告
   window.onbeforeunload = function() {
     if (settings.onbeforeunloadWarning === true) {
       return '動画の読み込みがリセットされる可能性があります';
     }
-  };
+  }
 
-  // スタートやエンドに移動してしまったときの前の位置を保持する変数
-  var back;
-  // autoBlur内のsetTimeout止めるための変数
-  var timerId;
+  // ショートカットキーに応じて関数を呼び出す
+  window.addEventListener('keydown', function(event) {
+    // 円マークをバックスラッシュに変換
+    var eventKey = encodeYenSignToBackslash(event.key);
 
-  // 再生する / 停止する
-  function playAndPause() {
+    // escが押されたらアクティブフォーカスを外す
+    if (eventKey == fixed.isEscape) {
+      activeBlur();
+    }
+
+    // 装飾キーをエスケープ
+    if (event.metaKey || event.ctrlKey || event.altKey) {
+      return false;
+    }
+
+    // 入力フォームにフォーカスがあるときはショートカットを無効化
+    if ((document.activeElement.nodeName === 'INPUT'
+    || document.activeElement.nodeName == 'TEXTAREA'
+    || document.activeElement.getAttribute('type') === 'text')
+    || document.activeElement.isContentEditable === true) {
+      return false;
+    }
+    else {
+      activeBlur();
+    }
+
+    // オプションのキーと固定のキーに関しては
+    // 元々サイトで実装されているイベントリスナーを
+    // 無効化してこちらの処理のみを実行する
+    Object.keys(settings).forEach(function(key) {
+      if (eventKey == settings[key]) {
+        event.stopPropagation();
+      }
+    });
+    Object.keys(fixed).forEach(function(key) {
+      if (eventKey == fixed[key]) {
+        event.stopPropagation();
+      }
+    });
+
+    // ショートカットキーから関数を呼び出す
+    switch (eventKey) {
+      // オプションのキーコード
+      case settings.togglePlayAndPauseKeyCode:   togglePlayAndPause();   break;  // default: k
+      case settings.jumpToBeginningKeyCode:      jumpToBeginning();      break;  // default: h
+      case settings.jumpToEndKeyCode:            jumpToEnd();            break;  // default: e
+      case settings.prevFrameKeyCode:            prevFrame();            break;  // default: j
+      case settings.nextFrameKeyCode:            nextFrame();            break;  // default: l
+      case settings.jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrame(); break;  // default: t
+      case settings.backToBeforeFrameKeyCode:    backToBeforeFrame();    break;  // default: b
+      case settings.changeScreenModeKeyCode:     changeScreenMode();     break;  // default: s
+      // 固定のキーコード
+      case fixed.togglePlayAndPauseKeyCode: event.preventDefault(); togglePlayAndPause();    break;  // space
+      case fixed.prevFrameKeyCode:          event.preventDefault(); prevFrame();             break;  // left-arrow
+      case fixed.nextFrameKeyCode:          event.preventDefault(); nextFrame();             break;  // right-arrow
+      case fixed.isEscape:                  event.preventDefault(); releaseFullScreenMode(); break;  // esc
+      case fixed.inputCommentKeyCode:                               inputComment();          break;  // c
+    }
+
+    // 数字のキーを押すとその数字に対応する割合まで動画を移動する
+    // キーボードの 3 を押すと動画全体の 30% の位置に移動する
+    // 固定のキーコード
+    if (eventKey >= '0' && eventKey <= '9') {
+      jumpToTimerRatio(eventKey);
+    }
+
+  }, true);
+
+  // 再生/停止
+  function togglePlayAndPause() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     status = player.ext_getStatus();
@@ -53,12 +121,9 @@ $(function() {
       player.ext_play(false);
     else if (status == 'paused')
       player.ext_play(true);
-    document.onkeydown = function(e) {
-      return !(e.keyCode == 32);
-    }
-  };
+  }
 
-  // 次のフレームに移動する
+  // 次のフレームに移動
   function nextFrame() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
@@ -75,9 +140,9 @@ $(function() {
       player.ext_setPlayheadTime(next);
       checkNext = player.ext_getPlayheadTime();
     }
-  };
+  }
 
-  // 前のフレームに移動する
+  // 前のフレームに移動
   function prevFrame() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
@@ -90,43 +155,44 @@ $(function() {
       player.ext_setPlayheadTime(prev);
       checkPrev = player.ext_getPlayheadTime();
     }
-  };
+  }
 
-  // 動画の一番最初に移動する
-  function jumpToStart() {
+  // 動画の一番最初に移動
+  function jumpToBeginning() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     back = player.ext_getPlayheadTime();
     player.ext_setPlayheadTime(0);
-  };
+  }
 
-  // 動画の一番最後に移動する
+  // 動画の一番最後に移動
   function jumpToEnd() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     back = player.ext_getPlayheadTime();
     var endtime = player.ext_getTotalTime();
     player.ext_setPlayheadTime(endtime);
-  };
+  }
 
-  // スタートやエンドに戻ってしまったときに元の位置に戻る
-  function backToPrevFrame() {
+  // スタートやエンドに戻ってしまったときに元の位置に移動
+  function backToBeforeFrame() {
     if (back !== null) {
       scrollToPlayer();
       var player = document.getElementById('external_nicoplayer');
       player.ext_setPlayheadTime(back);
     }
-  };
-
-  function jumpToTimeRatio(timeRatio) {
-    scrollToPlayer();
-    var player = document.getElementById('external_nicoplayer');
-    timeRatio = (timeRatio - 48) / 10;
-    timeRatio = player.ext_getTotalTime() * timeRatio;
-    player.ext_setPlayheadTime(timeRatio);
   }
 
-  // フルスクリーンモードにする / 解除する
+  // 数字に対応する割合まで動画を移動
+  function jumpToTimerRatio(timerRatio) {
+    scrollToPlayer();
+    var player = document.getElementById('external_nicoplayer');
+    timerRatio = Number(timerRatio) / 10;
+    timerRatio = player.ext_getTotalTime() * timerRatio;
+    player.ext_setPlayheadTime(timerRatio);
+  }
+
+  // フルスクリーンモード/解除
   function changeScreenMode() {
     scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
@@ -135,11 +201,26 @@ $(function() {
       player.ext_setVideoSize('fit');
     } else if (fullScreen == 'fit') {
       player.ext_setVideoSize('normal');
+    } else {
+      return false;
     }
-  };
+  }
 
-  // 時間を指定して移動する
-  function jumpToFrame() {
+  // フルスクリーンモード解除(esc専用)
+  function releaseFullScreenMode() {
+    var player = document.getElementById('external_nicoplayer');
+    var fullScreenStatus = player.ext_getVideoSize();
+    if (fullScreenStatus == 'fit') {
+      scrollToPlayer();
+      player.ext_setVideoSize('normal');
+    }
+    else {
+      return false;
+    }
+  }
+
+  // 時間を指定して移動
+  function jumpToSpecifiedFrame() {
     scrollToPlayer();
     inputOfJumpTo = prompt('移動先時間(形式: 25:25):');
     if (inputOfJumpTo.match(/^\d{1,3}:\d{1,2}$/)) {
@@ -162,16 +243,25 @@ $(function() {
     }
     else
       alert('正しい形式で入力してください(例 25:25)');
-  };
+  }
 
-  // コメント入力欄にフォーカスする
+  // コメント入力欄にフォーカス
   function inputComment() {
     scrollToPlayer();
-    clearTimeout(timerId);
+    clearTimeout(timerID);
     document.getElementById('external_nicoplayer').focus();
-  };
+  }
 
-  // 動画プレイヤーまでスクロールする
+  // 円マークをバックスラッシュに変換する
+  function encodeYenSignToBackslash(key) {
+    // 165 -> Yen Sign
+    if (key.charCodeAt() == 165) {
+      key = '\\';
+    }
+    return key;
+  }
+
+  // 動画プレイヤーまでスクロール
   function scrollToPlayer() {
     var player = document.getElementById('external_nicoplayer');
     var rect = player.getBoundingClientRect();
@@ -179,63 +269,9 @@ $(function() {
     var dElm = document.documentElement;
     var dBody = document.body;
     var scrollY = dElm.scrollTop || dBody.scrollTop;
-    var y = positionY + scrollY - 50;
+    var y = positionY + scrollY - 100;
     scrollTo(0, y);
-  };
-
-  // ショートカットキーに応じて関数を呼び出す
-  window.addEventListener('keydown', function(event) {
-    // escが押されたらアクティブフォーカスを外す
-    if (eventKey == fixed.isEscape) {
-      activeBlur();
-    }
-    
-    // 装飾キーをエスケープ
-    if (event.metaKey || event.ctrlKey || event.altKey) {
-      return false;
-    }
-
-    // 入力フォームにフォーカスがあるときはショートカットを無効化
-    if ((document.activeElement.nodeName === 'INPUT'
-    || document.activeElement.nodeName == 'TEXTAREA'
-    || document.activeElement.getAttribute('type') === 'text')
-    || document.activeElement.isContentEditable === true) {
-      return false;
-    }
-    else {
-      activeBlur();
-    }
-
-    if (event.keyCode == 27) {
-      if (document.activeElement == document.getElementById('external_nicoplayer')) {
-        autoBlur();
-      }
-    }
-
-    if (document.activeElement !== document.getElementById('external_nicoplayer') && !(document.activeElement.nodeName === 'INPUT' && document.activeElement.getAttribute('type') === 'text') && !(document.activeElement.isContentEditable)) {
-      if (event.keyCode == 32 || event.keyCode == settings.playAndPauseKeyCode) {
-        playAndPause();
-      } else if (event.keyCode == 39 || event.keyCode == settings.nextFrameKeyCode) {
-        nextFrame();
-      } else if (event.keyCode == 37 || event.keyCode == settings.prevFrameKeyCode) {
-        prevFrame();
-      } else if (event.keyCode == settings.jumpToStartKeyCode) {
-        jumpToStart();
-      } else if (event.keyCode == settings.jumpToEndKeyCode) {
-        jumpToEnd();
-      } else if (event.keyCode == settings.backToPrevFrameKeyCode) {
-        backToPrevFrame();
-      } else if (event.keyCode == settings.changeScreenModeKeyCode) {
-        changeScreenMode();
-      } else if (event.keyCode == settings.jumpToFrameKeyCode) {
-        jumpToFrame();
-      } else if (event.keyCode == 67) {
-        inputComment();
-      } else if (event.keyCode >= 48 && event.keyCode <= 57) {
-        jumpToTimeRatio(event.keyCode);
-      }
-    }
-  }, true);
+  }
 
   // アクティブフォーカスを外す
   function activeBlur() {
