@@ -8,6 +8,7 @@ var defaultKey = {
   backToBeforeFrameKeyCode:    'b',
   changeScreenModeKeyCode:     'f',
   onbeforeunloadWarning:      true,
+  checkCommandAvailability:  false,
 };
 
 $(function() {
@@ -37,6 +38,7 @@ function loadOptions() {
     updateInputText('back-to-before-frame',    storage.backToBeforeFrameKeyCode);
     updateInputText('change-screen-mode',      storage.changeScreenModeKeyCode);
     document.getElementById('onbeforeunload-warning').checked = storage.onbeforeunloadWarning;
+    document.getElementById('check-command-availability').checked = storage.checkCommandAvailability;
   });
 }
 
@@ -55,6 +57,7 @@ function saveOptions() {
   var backToBeforeFrameKeyCode    = document.getElementById('back-to-before-frame').value;
   var changeScreenModeKeyCode     = document.getElementById('change-screen-mode').value;
   var onbeforeunloadWarning       = document.getElementById('onbeforeunload-warning').checked;
+  var checkCommandAvailability    = document.getElementById('check-command-availability').checked;
 
   var validateFlag = [];
   validateFlag[0] = checkValidate('toggle-play-and-pause');
@@ -66,6 +69,7 @@ function saveOptions() {
   validateFlag[6] = checkValidate('back-to-before-frame');
   validateFlag[7] = checkValidate('change-screen-mode');
   validateFlag[8] = checkValidateChecked('onbeforeunload-warning');
+  validateFlag[9] = checkValidateChecked('check-command-availability');
 
   // when some input is wrong
   for (var i = 0; i < validateFlag.length; i++) {
@@ -83,7 +87,8 @@ function saveOptions() {
     jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrameKeyCode,
     backToBeforeFrameKeyCode:    backToBeforeFrameKeyCode,
     changeScreenModeKeyCode:     changeScreenModeKeyCode,
-    onbeforeunloadWarning:       onbeforeunloadWarning
+    onbeforeunloadWarning:       onbeforeunloadWarning,
+    checkCommandAvailability:    checkCommandAvailability
   }, function() {
     var status = $('#status');
     status.text('Saved');

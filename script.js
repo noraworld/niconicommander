@@ -11,6 +11,7 @@ $(function() {
     backToBeforeFrameKeyCode:    'b',
     changeScreenModeKeyCode:     'f',
     onbeforeunloadWarning:      true,
+    checkCommandAvailability:  false,
   };
   var fixed = {
     // 固定のキーコード
@@ -31,6 +32,8 @@ $(function() {
     settings.backToBeforeFrameKeyCode    = storage.backToBeforeFrameKeyCode;
     settings.changeScreenModeKeyCode     = storage.changeScreenModeKeyCode;
     settings.onbeforeunloadWarning       = Boolean(storage.onbeforeunloadWarning);
+    settings.checkCommandAvailability    = Boolean(storage.checkCommandAvailability);
+    hoge();
   });
 
   // スタートやエンドに移動してしまったときの前の位置を保持する
@@ -41,6 +44,34 @@ $(function() {
   // 有効化されている間はescを押したりクリックしたりしない限りは
   // 一切のコマンドが無効化される
   var commentable = false;
+  // c を押すことでプレイヤーへのフォーカスが許可されたかどうか
+  // マウス操作によるプレイヤーへのフォーカスと区別するために使用する
+  var allowFocusPlayerFromKey = false;
+  var commandInitial;
+  var enabled;
+  var disabled;
+
+  function hoge() {
+    // if -> 簡略化表示, else -> 正式表示
+    if (settings.checkCommandAvailability === true) {
+      commandInitial  = '<div id="niconicommander-status"><strong><span style="color:blue;">有効</span></strong></div>';
+      commandEnabled  = '<strong><span style="color:blue;">有効</span></strong>';
+      commandDisabled = '<strong><span style="color:red;">無効</span></strong>';
+    }
+    else {
+      commandInitial  = '<div id="niconicommander-status"><strong>niconicommander: <span style="color:blue;">有効</span></strong></div>';
+      commandEnabled  = '<strong>niconicommander: <span style="color:blue;">有効</span></strong>';
+      commandDisabled = '<strong>niconicommander: <span style="color:red;">無効</span></strong><br>有効にするにはescを押すかプレイヤー以外をクリック';
+    }
+    // コマンドの有効/無効メッセージを表示する(最初は有効で表示)
+    $('body').append(commandInitial);
+    $('#niconicommander-status').css('top', $(window).scrollTop());
+  }
+
+  // メッセージを追従させる
+  $(document).scroll(function() {
+    $('#niconicommander-status').css('top', $(this).scrollTop());
+  });
 
   // ページを離れるときに警告
   window.onbeforeunload = function() {
@@ -53,6 +84,19 @@ $(function() {
   $('body').on('click', function() {
     allowFocusPlayer = false;
     commentable = false;
+    allowFocusPlayerFromKey = false;
+    checkCommandAvailability();
+  });
+  // 動画プレイヤーにフォーカスするとコメントが入力できる
+  // ただしショートカットキーからではなく
+  // マウス操作でフォーカスした場合に限る
+  $('#external_nicoplayer').on('focus', function() {
+    if (allowFocusPlayerFromKey === false) {
+      allowFocusPlayer = true;
+      commentable = true;
+      allowFocusPlayerFromKey = false;
+      checkCommandAvailability();
+    }
   });
 
   // ショートカットキーに応じて関数を呼び出す
@@ -64,7 +108,9 @@ $(function() {
     if (eventKey == fixed.isEscape) {
       allowFocusPlayer = false;
       commentable = false;
+      allowFocusPlayerFromKey = false;
       activeBlur();
+      checkCommandAvailability();
     }
 
     // 装飾キーをエスケープ
@@ -85,10 +131,15 @@ $(function() {
     // escを押したりクリックしたりすると状態は解除されコマンドが有効化される(別記)
     if (allowFocusPlayer === true && eventKey == fixed.inputCommentKeyCode) {
       commentable = true;
+      allowFocusPlayerFromKey = false;
+      checkCommandAvailability();
       return false;
     }
     else if (allowFocusPlayer === true && eventKey != fixed.inputCommentKeyCode) {
       allowFocusPlayer = false;
+      commentable = false;
+      allowFocusPlayerFromKey = false;
+      checkCommandAvailability();
     }
 
     // 入力フォームにフォーカスがあるときはショートカットを無効化
@@ -128,11 +179,11 @@ $(function() {
       case settings.backToBeforeFrameKeyCode:    backToBeforeFrame();    break;  // default: b
       case settings.changeScreenModeKeyCode:     changeScreenMode();     break;  // default: s
       // 固定のキーコード
-      case fixed.togglePlayAndPauseKeyCode: event.preventDefault();  togglePlayAndPause();    break;  // space
-      case fixed.prevFrameKeyCode:          event.preventDefault();  prevFrame();             break;  // left-arrow
-      case fixed.nextFrameKeyCode:          event.preventDefault();  nextFrame();             break;  // right-arrow
-      case fixed.isEscape:                  event.preventDefault();  releaseFullScreenMode(); break;  // esc
-      case fixed.inputCommentKeyCode:       allowFocusPlayer = true; inputComment();          break;  // c
+      case fixed.togglePlayAndPauseKeyCode: event.preventDefault();  togglePlayAndPause();                       break;  // space
+      case fixed.prevFrameKeyCode:          event.preventDefault();  prevFrame();                                break;  // left-arrow
+      case fixed.nextFrameKeyCode:          event.preventDefault();  nextFrame();                                break;  // right-arrow
+      case fixed.isEscape:                  event.preventDefault();  releaseFullScreenMode();                    break;  // esc
+      case fixed.inputCommentKeyCode:       allowFocusPlayer = true; inputComment(); checkCommandAvailability(); break;  // c
     }
 
     // 数字のキーを押すとその数字に対応する割合まで動画を移動する
@@ -143,6 +194,16 @@ $(function() {
     }
 
   }, true);
+
+  // 現在コマンドが有効なのか無効なのかを表示する
+  function checkCommandAvailability() {
+    if (allowFocusPlayer === true && commentable === true) {
+      $('#niconicommander-status').html(commandDisabled);
+    }
+    else {
+      $('#niconicommander-status').html(commandEnabled);
+    }
+  }
 
   // 再生/停止
   function togglePlayAndPause() {
@@ -280,7 +341,9 @@ $(function() {
   // コメント入力欄にフォーカス
   function inputComment() {
     scrollToPlayer();
+    allowFocusPlayerFromKey = true;
     document.getElementById('external_nicoplayer').focus();
+    checkCommandAvailability();
   }
 
   // 円マークをバックスラッシュに変換する

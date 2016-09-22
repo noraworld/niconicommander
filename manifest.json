@@ -26,6 +26,7 @@
     {
       "all_frames": true,
       "matches": ["http://www.nicovideo.jp/watch*"],
+      "css": ["script.css"],
       "js": ["jquery.js", "script.js"]
     }
   ]

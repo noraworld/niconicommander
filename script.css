@@ -1,0 +1,14 @@
+#niconicommander-status {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  text-align: justify;
+  word-break: break-all;
+  position: absolute;
+  overflow: scroll;
+  right: 0;
+  /*width: 185px;*/
+  /*height: 60px;*/
+  padding: 10px;
+  background-color: white;
+  z-index: 1000000;
+}
