@@ -70,7 +70,14 @@ input[type="text"] {
   border: 1px solid #cccccc;
 }
 
+#checkbox-wrapper {
+  width: 75px;
+  text-align: center;
+  display: inline-block;
+}
+
 span {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   width: 79px;
   text-align: center;
   display: inline-block;

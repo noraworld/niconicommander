@@ -2,15 +2,15 @@ $(function() {
 
   var settings = {
     // オプションで変更可能なキーコード
-    togglePlayAndPauseKeyCode:   'k',  // default: K
-    jumpToBeginningKeyCode:      'h',  // default: H
-    jumpToEndKeyCode:            'e',  // default: E
-    prevFrameKeyCode:            'j',  // default: J
-    nextFrameKeyCode:            'l',  // default: L
-    jumpToSpecifiedFrameKeyCode: 't',  // default: T
-    backToBeforeFrameKeyCode:    'b',  // default: B
-    changeScreenModeKeyCode:     's',  // default: S
-    onbeforeunloadWarning:      true,  // default: true
+    togglePlayAndPauseKeyCode:   'k',
+    jumpToBeginningKeyCode:      'h',
+    jumpToEndKeyCode:            'e',
+    prevFrameKeyCode:            'j',
+    nextFrameKeyCode:            'l',
+    jumpToSpecifiedFrameKeyCode: 't',
+    backToBeforeFrameKeyCode:    'b',
+    changeScreenModeKeyCode:     's',
+    onbeforeunloadWarning:      true,
   };
   var fixed = {
     // 固定のキーコード
@@ -33,9 +33,14 @@ $(function() {
     settings.onbeforeunloadWarning       = Boolean(storage.onbeforeunloadWarning);
   });
 
-  // グローバル変数
-  var back;     // スタートやエンドに移動してしまったときの前の位置を保持する変数
-  var timerID;  // autoBlur内のsetTimeout止めるための変数
+  // スタートやエンドに移動してしまったときの前の位置を保持する
+  var back = null;
+  // c を押したときにプレイヤーへのフォーカスを許す
+  var allowFocusPlayer = false;
+  // プレイヤーにフォーカス中にもう一度 c を押したときに有効になり
+  // 有効化されている間はescを押したりクリックしたりしない限りは
+  // 一切のコマンドが無効化される
+  var commentable = false;
 
   // ページを離れるときに警告
   window.onbeforeunload = function() {
@@ -44,19 +49,46 @@ $(function() {
     }
   }
 
+  // クリックすると無効化されているコマンドが有効化される
+  $('body').on('click', function() {
+    allowFocusPlayer = false;
+    commentable = false;
+  });
+
   // ショートカットキーに応じて関数を呼び出す
   window.addEventListener('keydown', function(event) {
     // 円マークをバックスラッシュに変換
     var eventKey = encodeYenSignToBackslash(event.key);
 
-    // escが押されたらアクティブフォーカスを外す
+    // escが押されたらコマンドが有効化されアクティブフォーカスが外れる
     if (eventKey == fixed.isEscape) {
+      allowFocusPlayer = false;
+      commentable = false;
       activeBlur();
     }
 
     // 装飾キーをエスケープ
     if (event.metaKey || event.ctrlKey || event.altKey) {
       return false;
+    }
+
+    // コメント入力中はコマンドを無効化する
+    if (commentable === true) {
+      return false;
+    }
+
+    // c が一回押された状態(プレイヤーにファーカスしている状態)でもう一度 c を押すと
+    // コメント可能状態となり一切のコマンドが無効化される
+    // ただし c が一回押された状態で別のキーを押すと
+    // プレイヤーへのフォーカスが外れて状態がリセットされる
+    // プレイヤーにフォーカスしている状態やコメント入力状態でも
+    // escを押したりクリックしたりすると状態は解除されコマンドが有効化される(別記)
+    if (allowFocusPlayer === true && eventKey == fixed.inputCommentKeyCode) {
+      commentable = true;
+      return false;
+    }
+    else if (allowFocusPlayer === true && eventKey != fixed.inputCommentKeyCode) {
+      allowFocusPlayer = false;
     }
 
     // 入力フォームにフォーカスがあるときはショートカットを無効化
@@ -66,7 +98,7 @@ $(function() {
     || document.activeElement.isContentEditable === true) {
       return false;
     }
-    else {
+    else if (allowFocusPlayer === false) {
       activeBlur();
     }
 
@@ -96,11 +128,11 @@ $(function() {
       case settings.backToBeforeFrameKeyCode:    backToBeforeFrame();    break;  // default: b
       case settings.changeScreenModeKeyCode:     changeScreenMode();     break;  // default: s
       // 固定のキーコード
-      case fixed.togglePlayAndPauseKeyCode: event.preventDefault(); togglePlayAndPause();    break;  // space
-      case fixed.prevFrameKeyCode:          event.preventDefault(); prevFrame();             break;  // left-arrow
-      case fixed.nextFrameKeyCode:          event.preventDefault(); nextFrame();             break;  // right-arrow
-      case fixed.isEscape:                  event.preventDefault(); releaseFullScreenMode(); break;  // esc
-      case fixed.inputCommentKeyCode:                               inputComment();          break;  // c
+      case fixed.togglePlayAndPauseKeyCode: event.preventDefault();  togglePlayAndPause();    break;  // space
+      case fixed.prevFrameKeyCode:          event.preventDefault();  prevFrame();             break;  // left-arrow
+      case fixed.nextFrameKeyCode:          event.preventDefault();  nextFrame();             break;  // right-arrow
+      case fixed.isEscape:                  event.preventDefault();  releaseFullScreenMode(); break;  // esc
+      case fixed.inputCommentKeyCode:       allowFocusPlayer = true; inputComment();          break;  // c
     }
 
     // 数字のキーを押すとその数字に対応する割合まで動画を移動する
@@ -248,7 +280,6 @@ $(function() {
   // コメント入力欄にフォーカス
   function inputComment() {
     scrollToPlayer();
-    clearTimeout(timerID);
     document.getElementById('external_nicoplayer').focus();
   }
 
@@ -280,7 +311,12 @@ $(function() {
 
   // 常にプレイヤーからフォーカスを外す
   $('#external_nicoplayer').on('focus', function() {
-    $(this).blur();
+    if (allowFocusPlayer === false) {
+      $(this).blur();
+    }
+    else {
+      return false;
+    }
   });
 
 });

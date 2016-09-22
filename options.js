@@ -1,13 +1,13 @@
 var defaultKey = {
-  togglePlayAndPauseKeyCode:   'k',   // default: K
-  jumpToBeginningKeyCode:      'h',   // default: H
-  jumpToEndKeyCode:            'e',   // default: E
-  prevFrameKeyCode:            'j',   // default: J
-  nextFrameKeyCode:            'l',   // default: L
-  jumpToSpecifiedFrameKeyCode: 't',   // default: T
-  backToBeforeFrameKeyCode:    'b',   // default: B
-  changeScreenModeKeyCode:     's',   // default: S
-  onbeforeunloadWarning:      true, // default: true
+  togglePlayAndPauseKeyCode:   'k',
+  jumpToBeginningKeyCode:      'h',
+  jumpToEndKeyCode:            'e',
+  prevFrameKeyCode:            'j',
+  nextFrameKeyCode:            'l',
+  jumpToSpecifiedFrameKeyCode: 't',
+  backToBeforeFrameKeyCode:    'b',
+  changeScreenModeKeyCode:     's',
+  onbeforeunloadWarning:      true,
 };
 
 $(function() {
