@@ -89,15 +89,17 @@ $(function() {
     allowFocusPlayerFromKey = false;
     checkCommandAvailability();
   });
-  // 動画プレイヤーにフォーカスするとコメントが入力できる
-  // ただしショートカットキーからではなく
-  // マウス操作でフォーカスした場合に限る
-  $('#external_nicoplayer').on('focus', function() {
-    if (allowFocusPlayerFromKey === false) {
-      allowFocusPlayer = true;
-      commentable = true;
+  // 動画プレイヤーにマウス移動した(クリックした、フォーカスしたこととみなす)ときに
+  // c を一回だけ押している状態だったらすべて解除する
+  $('#external_nicoplayer').on('mousemove', function() {
+    if (allowFocusPlayer === true && commentable === false && allowFocusPlayerFromKey === true) {
+      allowFocusPlayer = false;
+      commentable = false;
       allowFocusPlayerFromKey = false;
       checkCommandAvailability();
+    }
+    else {
+      return false;
     }
   });
 
