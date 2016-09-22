@@ -9,7 +9,7 @@ $(function() {
     nextFrameKeyCode:            'l',
     jumpToSpecifiedFrameKeyCode: 't',
     backToBeforeFrameKeyCode:    'b',
-    changeScreenModeKeyCode:     's',
+    changeScreenModeKeyCode:     'f',
     onbeforeunloadWarning:      true,
   };
   var fixed = {
