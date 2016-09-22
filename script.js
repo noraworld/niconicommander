@@ -12,6 +12,7 @@ $(function() {
     changeScreenModeKeyCode:     'f',
     onbeforeunloadWarning:      true,
     checkCommandAvailability:  false,
+    scrollToPlayerKeyCode:      true,
   };
   var fixed = {
     // 固定のキーコード
@@ -33,7 +34,8 @@ $(function() {
     settings.changeScreenModeKeyCode     = storage.changeScreenModeKeyCode;
     settings.onbeforeunloadWarning       = Boolean(storage.onbeforeunloadWarning);
     settings.checkCommandAvailability    = Boolean(storage.checkCommandAvailability);
-    hoge();
+    settings.scrollToPlayerKeyCode       = Boolean(storage.scrollToPlayerKeyCode);
+    generateCheckCommandAvailabilityMessages();
   });
 
   // スタートやエンドに移動してしまったときの前の位置を保持する
@@ -51,7 +53,7 @@ $(function() {
   var enabled;
   var disabled;
 
-  function hoge() {
+  function generateCheckCommandAvailabilityMessages() {
     // if -> 簡略化表示, else -> 正式表示
     if (settings.checkCommandAvailability === true) {
       commandInitial  = '<div id="niconicommander-status"><strong><span style="color:blue;">有効</span></strong></div>';
@@ -159,11 +161,17 @@ $(function() {
     Object.keys(settings).forEach(function(key) {
       if (eventKey == settings[key]) {
         event.stopPropagation();
+        if (settings.scrollToPlayerKeyCode === true) {
+          scrollToPlayer();
+        }
       }
     });
     Object.keys(fixed).forEach(function(key) {
       if (eventKey == fixed[key]) {
         event.stopPropagation();
+        if (settings.scrollToPlayerKeyCode === true) {
+          scrollToPlayer();
+        }
       }
     });
 
@@ -207,7 +215,6 @@ $(function() {
 
   // 再生/停止
   function togglePlayAndPause() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     status = player.ext_getStatus();
     if (status == 'playing')
@@ -218,7 +225,6 @@ $(function() {
 
   // 次のフレームに移動
   function nextFrame() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     var totalTime = player.ext_getTotalTime();
     var loadedRatio = player.ext_getLoadedRatio();
@@ -237,7 +243,6 @@ $(function() {
 
   // 前のフレームに移動
   function prevFrame() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     var playtime = player.ext_getPlayheadTime();
     var prev = playtime - 1;
@@ -252,7 +257,6 @@ $(function() {
 
   // 動画の一番最初に移動
   function jumpToBeginning() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     back = player.ext_getPlayheadTime();
     player.ext_setPlayheadTime(0);
@@ -260,7 +264,6 @@ $(function() {
 
   // 動画の一番最後に移動
   function jumpToEnd() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     back = player.ext_getPlayheadTime();
     var endtime = player.ext_getTotalTime();
@@ -270,7 +273,6 @@ $(function() {
   // スタートやエンドに戻ってしまったときに元の位置に移動
   function backToBeforeFrame() {
     if (back !== null) {
-      scrollToPlayer();
       var player = document.getElementById('external_nicoplayer');
       player.ext_setPlayheadTime(back);
     }
@@ -278,7 +280,6 @@ $(function() {
 
   // 数字に対応する割合まで動画を移動
   function jumpToTimerRatio(timerRatio) {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     timerRatio = Number(timerRatio) / 10;
     timerRatio = player.ext_getTotalTime() * timerRatio;
@@ -287,7 +288,6 @@ $(function() {
 
   // フルスクリーンモード/解除
   function changeScreenMode() {
-    scrollToPlayer();
     var player = document.getElementById('external_nicoplayer');
     var fullScreen = player.ext_getVideoSize();
     if (fullScreen == 'normal') {
@@ -304,7 +304,6 @@ $(function() {
     var player = document.getElementById('external_nicoplayer');
     var fullScreenStatus = player.ext_getVideoSize();
     if (fullScreenStatus == 'fit') {
-      scrollToPlayer();
       player.ext_setVideoSize('normal');
     }
     else {
@@ -314,7 +313,6 @@ $(function() {
 
   // 時間を指定して移動
   function jumpToSpecifiedFrame() {
-    scrollToPlayer();
     inputOfJumpTo = prompt('移動先時間(形式: 25:25):');
     if (inputOfJumpTo.match(/^\d{1,3}:\d{1,2}$/)) {
       inputOfJumpTo = inputOfJumpTo.split(':');
@@ -340,7 +338,6 @@ $(function() {
 
   // コメント入力欄にフォーカス
   function inputComment() {
-    scrollToPlayer();
     allowFocusPlayerFromKey = true;
     document.getElementById('external_nicoplayer').focus();
     checkCommandAvailability();

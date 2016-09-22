@@ -9,6 +9,7 @@ var defaultKey = {
   changeScreenModeKeyCode:     'f',
   onbeforeunloadWarning:      true,
   checkCommandAvailability:  false,
+  scrollToPlayerKeyCode:      true,
 };
 
 $(function() {
@@ -39,6 +40,7 @@ function loadOptions() {
     updateInputText('change-screen-mode',      storage.changeScreenModeKeyCode);
     document.getElementById('onbeforeunload-warning').checked = storage.onbeforeunloadWarning;
     document.getElementById('check-command-availability').checked = storage.checkCommandAvailability;
+    document.getElementById('scroll-to-player').checked = storage.scrollToPlayerKeyCode;
   });
 }
 
@@ -58,18 +60,20 @@ function saveOptions() {
   var changeScreenModeKeyCode     = document.getElementById('change-screen-mode').value;
   var onbeforeunloadWarning       = document.getElementById('onbeforeunload-warning').checked;
   var checkCommandAvailability    = document.getElementById('check-command-availability').checked;
+  var scrollToPlayerKeyCode       = document.getElementById('scroll-to-player').checked;
 
   var validateFlag = [];
-  validateFlag[0] = checkValidate('toggle-play-and-pause');
-  validateFlag[1] = checkValidate('jump-to-beginning');
-  validateFlag[2] = checkValidate('jump-to-end');
-  validateFlag[3] = checkValidate('prev-frame');
-  validateFlag[4] = checkValidate('next-frame');
-  validateFlag[5] = checkValidate('jump-to-specified-frame');
-  validateFlag[6] = checkValidate('back-to-before-frame');
-  validateFlag[7] = checkValidate('change-screen-mode');
-  validateFlag[8] = checkValidateChecked('onbeforeunload-warning');
-  validateFlag[9] = checkValidateChecked('check-command-availability');
+  validateFlag[0]  = checkValidate('toggle-play-and-pause');
+  validateFlag[1]  = checkValidate('jump-to-beginning');
+  validateFlag[2]  = checkValidate('jump-to-end');
+  validateFlag[3]  = checkValidate('prev-frame');
+  validateFlag[4]  = checkValidate('next-frame');
+  validateFlag[5]  = checkValidate('jump-to-specified-frame');
+  validateFlag[6]  = checkValidate('back-to-before-frame');
+  validateFlag[7]  = checkValidate('change-screen-mode');
+  validateFlag[8]  = checkValidateChecked('onbeforeunload-warning');
+  validateFlag[9]  = checkValidateChecked('check-command-availability');
+  validateFlag[10] = checkValidateChecked('scroll-to-player');
 
   // when some input is wrong
   for (var i = 0; i < validateFlag.length; i++) {
@@ -88,7 +92,8 @@ function saveOptions() {
     backToBeforeFrameKeyCode:    backToBeforeFrameKeyCode,
     changeScreenModeKeyCode:     changeScreenModeKeyCode,
     onbeforeunloadWarning:       onbeforeunloadWarning,
-    checkCommandAvailability:    checkCommandAvailability
+    checkCommandAvailability:    checkCommandAvailability,
+    scrollToPlayerKeyCode:       scrollToPlayerKeyCode
   }, function() {
     var status = $('#status');
     status.text('Saved');
