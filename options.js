@@ -4,6 +4,10 @@ var defaultKey = {
   jumpToEndKeyCode:            'e',
   prevFrameKeyCode:            'j',
   nextFrameKeyCode:            'l',
+  volumeDownKeyCode:           'd',
+  volumeUpKeyCode:             'u',
+  toggleMuteKeyCode:           'm',
+  toggleViewCommentKeyCode:    'v',
   jumpToSpecifiedFrameKeyCode: 't',
   backToBeforeFrameKeyCode:    'b',
   changeScreenModeKeyCode:     'f',
@@ -23,6 +27,10 @@ $(function() {
   initShortcutInput('jump-to-end');
   initShortcutInput('prev-frame');
   initShortcutInput('next-frame');
+  initShortcutInput('volume-down');
+  initShortcutInput('volume-up');
+  initShortcutInput('toggle-mute');
+  initShortcutInput('toggle-view-comment');
   initShortcutInput('jump-to-specified-frame');
   initShortcutInput('back-to-before-frame');
   initShortcutInput('change-screen-mode');
@@ -35,6 +43,10 @@ function loadOptions() {
     updateInputText('jump-to-end',             storage.jumpToEndKeyCode);
     updateInputText('prev-frame',              storage.prevFrameKeyCode);
     updateInputText('next-frame',              storage.nextFrameKeyCode);
+    updateInputText('volume-down',             storage.volumeDownKeyCode);
+    updateInputText('volume-up',               storage.volumeUpKeyCode);
+    updateInputText('toggle-mute',             storage.toggleMuteKeyCode);
+    updateInputText('toggle-view-comment',     storage.toggleViewCommentKeyCode);
     updateInputText('jump-to-specified-frame', storage.jumpToSpecifiedFrameKeyCode);
     updateInputText('back-to-before-frame',    storage.backToBeforeFrameKeyCode);
     updateInputText('change-screen-mode',      storage.changeScreenModeKeyCode);
@@ -55,6 +67,10 @@ function saveOptions() {
   var jumpToEndKeyCode            = document.getElementById('jump-to-end').value;
   var prevFrameKeyCode            = document.getElementById('prev-frame').value;
   var nextFrameKeyCode            = document.getElementById('next-frame').value;
+  var volumeDownKeyCode           = document.getElementById('volume-down').value;
+  var volumeUpKeyCode             = document.getElementById('volume-up').value;
+  var toggleMuteKeyCode           = document.getElementById('toggle-mute').value;
+  var toggleViewCommentKeyCode    = document.getElementById('toggle-view-comment').value;
   var jumpToSpecifiedFrameKeyCode = document.getElementById('jump-to-specified-frame').value;
   var backToBeforeFrameKeyCode    = document.getElementById('back-to-before-frame').value;
   var changeScreenModeKeyCode     = document.getElementById('change-screen-mode').value;
@@ -68,12 +84,16 @@ function saveOptions() {
   validateFlag[2]  = checkValidate('jump-to-end');
   validateFlag[3]  = checkValidate('prev-frame');
   validateFlag[4]  = checkValidate('next-frame');
-  validateFlag[5]  = checkValidate('jump-to-specified-frame');
-  validateFlag[6]  = checkValidate('back-to-before-frame');
-  validateFlag[7]  = checkValidate('change-screen-mode');
-  validateFlag[8]  = checkValidateChecked('onbeforeunload-warning');
-  validateFlag[9]  = checkValidateChecked('check-command-availability');
-  validateFlag[10] = checkValidateChecked('scroll-to-player');
+  validateFlag[5]  = checkValidate('volume-down');
+  validateFlag[6]  = checkValidate('volume-up');
+  validateFlag[7]  = checkValidate('toggle-mute');
+  validateFlag[8]  = checkValidate('toggle-view-comment');
+  validateFlag[9]  = checkValidate('jump-to-specified-frame');
+  validateFlag[10] = checkValidate('back-to-before-frame');
+  validateFlag[11] = checkValidate('change-screen-mode');
+  validateFlag[12] = checkValidateChecked('onbeforeunload-warning');
+  validateFlag[13] = checkValidateChecked('check-command-availability');
+  validateFlag[14] = checkValidateChecked('scroll-to-player');
 
   // when some input is wrong
   for (var i = 0; i < validateFlag.length; i++) {
@@ -88,6 +108,10 @@ function saveOptions() {
     jumpToEndKeyCode:            jumpToEndKeyCode,
     prevFrameKeyCode:            prevFrameKeyCode,
     nextFrameKeyCode:            nextFrameKeyCode,
+    volumeDownKeyCode:           volumeDownKeyCode,
+    volumeUpKeyCode:             volumeUpKeyCode,
+    toggleMuteKeyCode:           toggleMuteKeyCode,
+    toggleViewCommentKeyCode:    toggleViewCommentKeyCode,
     jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrameKeyCode,
     backToBeforeFrameKeyCode:    backToBeforeFrameKeyCode,
     changeScreenModeKeyCode:     changeScreenModeKeyCode,

@@ -7,6 +7,10 @@ $(function() {
     jumpToEndKeyCode:            'e',
     prevFrameKeyCode:            'j',
     nextFrameKeyCode:            'l',
+    volumeDownKeyCode:           'd',
+    volumeUpKeyCode:             'u',
+    toggleMuteKeyCode:           'm',
+    toggleViewCommentKeyCode:    'v',
     jumpToSpecifiedFrameKeyCode: 't',
     backToBeforeFrameKeyCode:    'b',
     changeScreenModeKeyCode:     'f',
@@ -29,6 +33,10 @@ $(function() {
     settings.jumpToEndKeyCode            = storage.jumpToEndKeyCode;
     settings.prevFrameKeyCode            = storage.prevFrameKeyCode;
     settings.nextFrameKeyCode            = storage.nextFrameKeyCode;
+    settings.volumeDownKeyCode           = storage.volumeDownKeyCode;
+    settings.volumeUpKeyCode             = storage.volumeUpKeyCode;
+    settings.toggleMuteKeyCode           = storage.toggleMuteKeyCode;
+    settings.toggleViewCommentKeyCode    = storage.toggleViewCommentKeyCode;
     settings.jumpToSpecifiedFrameKeyCode = storage.jumpToSpecifiedFrameKeyCode;
     settings.backToBeforeFrameKeyCode    = storage.backToBeforeFrameKeyCode;
     settings.changeScreenModeKeyCode     = storage.changeScreenModeKeyCode;
@@ -185,6 +193,10 @@ $(function() {
       case settings.jumpToEndKeyCode:            jumpToEnd();            break;  // default: e
       case settings.prevFrameKeyCode:            prevFrame();            break;  // default: j
       case settings.nextFrameKeyCode:            nextFrame();            break;  // default: l
+      case settings.volumeDownKeyCode:           volumeDown();           break;  // default: d
+      case settings.volumeUpKeyCode:             volumeUp();             break;  // default: u
+      case settings.toggleMuteKeyCode:           toggleMute();           break;  // default: m
+      case settings.toggleViewCommentKeyCode:    toggleViewComment();    break;  // default: v
       case settings.jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrame(); break;  // default: t
       case settings.backToBeforeFrameKeyCode:    backToBeforeFrame();    break;  // default: b
       case settings.changeScreenModeKeyCode:     changeScreenMode();     break;  // default: s
@@ -336,6 +348,46 @@ $(function() {
     }
     else
       alert('正しい形式で入力してください(例 25:25)');
+  }
+
+  // 音量ダウン
+  function volumeDown() {
+    var player = document.getElementById('external_nicoplayer');
+    var volume = Number(player.ext_getVolume());
+    if (volume >= 0) {
+      player.ext_setVolume(volume - 10);
+    }
+  }
+
+  // 音量アップ
+  function volumeUp() {
+    var player = document.getElementById('external_nicoplayer');
+    var volume = Number(player.ext_getVolume());
+    if (volume <= 100) {
+      player.ext_setVolume(volume + 10);
+    }
+  }
+
+  // ミュート/解除
+  function toggleMute() {
+    var player = document.getElementById('external_nicoplayer');
+    if (player.ext_isMute() === true) {
+      player.ext_setMute(false);
+    }
+    else {
+      player.ext_setMute(true);
+    }
+  }
+
+  // コメント表示/非表示
+  function toggleViewComment() {
+    var player = document.getElementById('external_nicoplayer');
+    if (player.ext_isCommentVisible() === true) {
+      player.ext_setCommentVisible(false);
+    }
+    else {
+      player.ext_setCommentVisible(true);
+    }
   }
 
   // コメント入力欄にフォーカス
