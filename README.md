@@ -2,7 +2,7 @@
 ニコニコ動画で動画の再生/停止や早送り/巻き戻しなどの機能をキーボードで操作できるようになる拡張機能です。Google Chrome で利用できます。
 
 ## ダウンロード
-[Chrome ウェブストア - ニコニコマンダー](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%80%E3%83%BC/baiinihbicmkmkhblpboabkckgheaahm?utm_source=chrome-ntp-icon)
+[ニコニコマンダー - Chrome ウェブストア](https://chrome.google.com/webstore/detail/%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%80%E3%83%BC/baiinihbicmkmkhblpboabkckgheaahm?utm_source=chrome-ntp-icon)
 
 ## 使い方
 以下のようなショートカットキーが利用できるようになります。
@@ -36,7 +36,7 @@
 ショートカットキーは設定ページで変更することができます。
 
 ## 更新履歴
-[CHANGELOG.md](https://github.com/noraworld/niconicommander/blob/master/CHANGELOG.md)を参照してください。
+[CHANGELOG.md](https://github.com/noraworld/niconicommander/blob/master/CHANGELOG.md) を参照してください。
 
 ## FAQ
 ### Q: フルスクリーンモードをモニタサイズにしても本拡張機能でフルスクリーンにするとブラウザサイズで拡大されてしまう
