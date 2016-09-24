@@ -126,7 +126,7 @@ function saveOptions() {
     scrollToPlayerKeyCode:       scrollToPlayerKeyCode
   }, function() {
     var status = $('#status');
-    status.text('Saved');
+    status.text('保存しました');
     setTimeout(function() {
       status.text('');
     }, 1500);
@@ -144,7 +144,7 @@ function resetOptions() {
     }
 
     var status = $('#status');
-    status.text('Reset');
+    status.text('初期化しました');
     setTimeout(function() {
       status.text('');
     }, 1500);
