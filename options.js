@@ -7,6 +7,7 @@ var defaultKey = {
   volumeDownKeyCode:           'd',
   volumeUpKeyCode:             'u',
   toggleMuteKeyCode:           'm',
+  toggleRepeatPlayKeyCode:     'r',
   toggleViewCommentKeyCode:    'v',
   jumpToSpecifiedFrameKeyCode: 't',
   backToBeforeFrameKeyCode:    'b',
@@ -30,6 +31,7 @@ $(function() {
   initShortcutInput('volume-down');
   initShortcutInput('volume-up');
   initShortcutInput('toggle-mute');
+  initShortcutInput('toggle-repeat-play');
   initShortcutInput('toggle-view-comment');
   initShortcutInput('jump-to-specified-frame');
   initShortcutInput('back-to-before-frame');
@@ -46,6 +48,7 @@ function loadOptions() {
     updateInputText('volume-down',             storage.volumeDownKeyCode);
     updateInputText('volume-up',               storage.volumeUpKeyCode);
     updateInputText('toggle-mute',             storage.toggleMuteKeyCode);
+    updateInputText('toggle-repeat-play',      storage.toggleRepeatPlayKeyCode);
     updateInputText('toggle-view-comment',     storage.toggleViewCommentKeyCode);
     updateInputText('jump-to-specified-frame', storage.jumpToSpecifiedFrameKeyCode);
     updateInputText('back-to-before-frame',    storage.backToBeforeFrameKeyCode);
@@ -70,6 +73,7 @@ function saveOptions() {
   var volumeDownKeyCode           = document.getElementById('volume-down').value;
   var volumeUpKeyCode             = document.getElementById('volume-up').value;
   var toggleMuteKeyCode           = document.getElementById('toggle-mute').value;
+  var toggleRepeatPlayKeyCode     = document.getElementById('toggle-repeat-play').value;
   var toggleViewCommentKeyCode    = document.getElementById('toggle-view-comment').value;
   var jumpToSpecifiedFrameKeyCode = document.getElementById('jump-to-specified-frame').value;
   var backToBeforeFrameKeyCode    = document.getElementById('back-to-before-frame').value;
@@ -87,13 +91,14 @@ function saveOptions() {
   validateFlag[5]  = checkValidate('volume-down');
   validateFlag[6]  = checkValidate('volume-up');
   validateFlag[7]  = checkValidate('toggle-mute');
-  validateFlag[8]  = checkValidate('toggle-view-comment');
-  validateFlag[9]  = checkValidate('jump-to-specified-frame');
-  validateFlag[10] = checkValidate('back-to-before-frame');
-  validateFlag[11] = checkValidate('change-screen-mode');
-  validateFlag[12] = checkValidateChecked('onbeforeunload-warning');
-  validateFlag[13] = checkValidateChecked('check-command-availability');
-  validateFlag[14] = checkValidateChecked('scroll-to-player');
+  validateFlag[8]  = checkValidate('toggle-repeat-play');
+  validateFlag[9]  = checkValidate('toggle-view-comment');
+  validateFlag[10] = checkValidate('jump-to-specified-frame');
+  validateFlag[11] = checkValidate('back-to-before-frame');
+  validateFlag[12] = checkValidate('change-screen-mode');
+  validateFlag[13] = checkValidateChecked('onbeforeunload-warning');
+  validateFlag[14] = checkValidateChecked('check-command-availability');
+  validateFlag[15] = checkValidateChecked('scroll-to-player');
 
   // when some input is wrong
   for (var i = 0; i < validateFlag.length; i++) {
@@ -111,6 +116,7 @@ function saveOptions() {
     volumeDownKeyCode:           volumeDownKeyCode,
     volumeUpKeyCode:             volumeUpKeyCode,
     toggleMuteKeyCode:           toggleMuteKeyCode,
+    toggleRepeatPlayKeyCode:     toggleRepeatPlayKeyCode,
     toggleViewCommentKeyCode:    toggleViewCommentKeyCode,
     jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrameKeyCode,
     backToBeforeFrameKeyCode:    backToBeforeFrameKeyCode,

@@ -10,6 +10,7 @@ $(function() {
     volumeDownKeyCode:           'd',
     volumeUpKeyCode:             'u',
     toggleMuteKeyCode:           'm',
+    toggleRepeatPlayKeyCode:     'r',
     toggleViewCommentKeyCode:    'v',
     jumpToSpecifiedFrameKeyCode: 't',
     backToBeforeFrameKeyCode:    'b',
@@ -36,6 +37,7 @@ $(function() {
     settings.volumeDownKeyCode           = storage.volumeDownKeyCode;
     settings.volumeUpKeyCode             = storage.volumeUpKeyCode;
     settings.toggleMuteKeyCode           = storage.toggleMuteKeyCode;
+    settings.toggleRepeatPlayKeyCode     = storage.toggleRepeatPlayKeyCode;
     settings.toggleViewCommentKeyCode    = storage.toggleViewCommentKeyCode;
     settings.jumpToSpecifiedFrameKeyCode = storage.jumpToSpecifiedFrameKeyCode;
     settings.backToBeforeFrameKeyCode    = storage.backToBeforeFrameKeyCode;
@@ -196,6 +198,7 @@ $(function() {
       case settings.volumeDownKeyCode:           volumeDown();           break;  // default: d
       case settings.volumeUpKeyCode:             volumeUp();             break;  // default: u
       case settings.toggleMuteKeyCode:           toggleMute();           break;  // default: m
+      case settings.toggleRepeatPlayKeyCode:     toggleRepeatPlay();     break;  // default: r
       case settings.toggleViewCommentKeyCode:    toggleViewComment();    break;  // default: v
       case settings.jumpToSpecifiedFrameKeyCode: jumpToSpecifiedFrame(); break;  // default: t
       case settings.backToBeforeFrameKeyCode:    backToBeforeFrame();    break;  // default: b
@@ -376,6 +379,17 @@ $(function() {
     }
     else {
       player.ext_setMute(true);
+    }
+  }
+
+  // リピート再生
+  function toggleRepeatPlay() {
+    var player = document.getElementById('external_nicoplayer');
+    if (player.ext_isRepeat() === true) {
+      player.ext_setRepeat(false);
+    }
+    else {
+      player.ext_setRepeat(true);
     }
   }
 
